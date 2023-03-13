@@ -1,0 +1,10 @@
+1. db.Sales.createIndex({user_id : 1});
+//used the syntax as needed and assigned the field with the indexing 
+
+2. db.Vendors.aggregate({$lookup : {from : "Sales" , localField : "_id" , foreignField : "user_id" , as : "Sales"}})
+//took the Vendors collection. Used the aggregate over it and added lookup pipeline. From was "from which collection" (Sales), locafield of Vendors and foriegn field of sales matched and result(Sales -- arr) as Sales in the Vendors;
+
+3.db.Sales.aggregate([{$lookup : {from : "Vendors" , localField : "user_id" , foreignField : "_id" , as:"Sales"}},{$unwind : {path : "$Sales"}},{$group : {_id : "$Sales.name" , total_sales : {$sum : 1} , total_profit : {$sum : "$profit"}}}]);
+
+
+4.db.Sales.aggregate([{$lookup : {from : "Vendors" , localField : "user_id" , foreignField : "_id" , as:"Sales"}},{$unwind : {path : "$Sales"}},{$group : {_id : "$Sales.name" , total_sales : {$sum : 1} , total_profit : {$sum : "$profit"}}},{$sort : {total_profit : -1} }])
